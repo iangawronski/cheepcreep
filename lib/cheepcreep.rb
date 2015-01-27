@@ -13,7 +13,6 @@ class Github
   base_uri 'https://api.github.com'
 
   def initialize
-    # ENV["FOO"] is like echo $FOO
     @auth = {:username => ENV['GITHUB_USER'], :password => ENV['GITHUB_PASS']}
   end
 
@@ -34,16 +33,7 @@ class Github
     end
     return followers_array
   end
-
-  # def get_gists(screen_name)
-  #   result = self.class.get("/users/#{screen_name}/gists")
-  #   json = JSON.parse(result.body)
-  #   binding.pry
-  # end
-
 end
-
-#binding.pry
 
 class CheepcreepApp
   def store_user_information(screen_name)
@@ -62,4 +52,4 @@ github = Github.new
 binding.pry
 # resp = github.get
 
-# @auth = {username: u, :password p}
+

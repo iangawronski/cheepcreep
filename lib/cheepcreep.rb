@@ -5,6 +5,7 @@ require "pry"
 
 module Cheepcreep
   class CreateGithubUser < ActiveRecord::Base
+  end
 end
 
 class Github
@@ -26,6 +27,12 @@ class Github
     options.merge!({:basic_auth => @auth})
     result = self.class.get("/users/#{screen_name}/followers", options)
     json = JSON.parse(result.body)
+    #binding.pry
+    followers_array = []
+    result.sample(20).each do |x|
+      followers_array << get_user(x['login'])
+    end
+    return followers_array
   end
 
   # def get_gists(screen_name)
@@ -36,22 +43,23 @@ class Github
 
 end
 
-binding.pry
+#binding.pry
 
 class CheepcreepApp
   def store_user_information(screen_name)
     Cheepcreep::GithubUser.create(login: screen_name["login"], name: screen_name["name"], blog: screen_name["blog"], public_repos: screen_name["public_repos"].to_i, followers: screen_name["followers"].to_i, following: screen_name["following"].to_i)
-
+  end
 end
 
-binding.pry
+#binding.pry
 
-creeper = CheepcreepApp.new
-creeper.creep
+# creeper = CheepcreepApp.new
+# creeper.creep
 
 
 
 github = Github.new
-resp = github.get
+binding.pry
+# resp = github.get
 
 # @auth = {username: u, :password p}

@@ -19,20 +19,50 @@ class Github
   def get_user(screen_name, options = {})
     options.merge!({:basic_auth => @auth})
     result = self.class.get("/users/#{screen_name}", options)
+    puts "#{result.headers['x-ratelimit-remaining']} requests left."
     json = JSON.parse(result.body)
   end
 
-  def get_followers(screen_name, options = {})
+  def list_gists(screen_name, options={})#page=1, per_page=20)
+    ##### pagination????
     options.merge!({:basic_auth => @auth})
-    result = self.class.get("/users/#{screen_name}/followers", options)
+    result = self.class.get("/users/#{screen_name}/gists", options)
     json = JSON.parse(result.body)
-    #binding.pry
-    followers_array = []
-    result.sample(20).each do |x|
-      followers_array << get_user(x['login'])
-    end
-    return followers_array
+    # binding.pry
   end
+
+  def create_gist
+  end
+
+  def edit_gist
+  end
+
+  def delete_gist(id, options={})
+    options.merge!({:basic_auth => @auth})
+    result = self.class.delete("/gists/#{id}", options)
+  end
+
+  def star_gist(id, options={})
+    options.merge!({:basic_auth => @auth})
+    result = self.class.put("/gists/#{id}/star", options)
+  end
+
+  def unstar_gist(id, options={})
+    options.merge!({:basic_auth => @auth})
+    result = self.class.delete("/gists/#{id}/star", options)
+  end
+
+#   def get_followers(screen_name, options = {}) #need to finish this after gists are figured out
+#     options.merge!({:basic_auth => @auth})
+#     result = self.class.get("/users/#{screen_name}/followers", options)
+#     json = JSON.parse(result.body)
+#     #binding.pry
+#     followers_array = []
+#     result.sample(20).each do |x|
+#       followers_array << get_user(x['login'])
+#     end
+#     return followers_array
+#   end
 end
 
 class CheepcreepApp

@@ -23,18 +23,22 @@ class Github
     json = JSON.parse(result.body)
   end
 
-  def list_gists(screen_name, options={})#page=1, per_page=20)
-    ##### pagination????
+  def list_gists(screen_name, options={})
     options.merge!({:basic_auth => @auth})
     result = self.class.get("/users/#{screen_name}/gists", options)
     json = JSON.parse(result.body)
-    # binding.pry
   end
 
-  def create_gist
+  def create_gist(options={})
+    opts = {:body => options.to_json}
+    result = self.class.post("/gists", opts)
+    json = JSON.parse(result.body)
   end
 
-  def edit_gist
+  def edit_gist(id, options={})
+    opts = {:body => options.to_json}
+    result = self.class.patch("/gists/#{id}")
+    json = JSON.parse(result.body)
   end
 
   def delete_gist(id, options={})
